@@ -3,30 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Chinese Pronunciation Coach</title>
+    <title>AI Chinese Pronunciation Master</title>
     <style>
         :root {
-            --primary: #6366f1;
-            --primary-hover: #4f46e5;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --background: #f8fafc;
-            --card-bg: #ffffff;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
+            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            --accent: #4f46e5;
+            --accent-light: #eef2ff;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --c-success: #10b981;
+            --c-warning: #f59e0b;
+            --c-danger: #ef4444;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
 
         body {
-            background: linear-gradient(135deg, #e0e7ff 0%, #f1f5f9 100%);
-            color: var(--text-main);
+            background: var(--bg-gradient);
+            color: var(--text-dark);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -34,186 +28,92 @@
             padding: 20px;
         }
 
-        .app-card {
-            background: var(--card-bg);
-            border-radius: 24px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        .wrapper {
+            background: #ffffff;
             width: 100%;
-            max-width: 550px;
-            padding: 40px;
-            transition: all 0.3s ease;
+            max-width: 500px;
+            border-radius: 24px;
+            padding: 35px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
         }
 
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+        .title-area { text-align: center; margin-bottom: 30px; }
+        .title-area h1 { font-size: 24px; font-weight: 800; color: var(--accent); }
+        .title-area p { font-size: 13px; color: var(--text-light); margin-top: 4px; }
 
-        header h1 {
-            font-size: 26px;
-            font-weight: 800;
-            color: var(--primary);
-            letter-spacing: -0.5px;
-        }
-
-        header p {
-            color: var(--text-muted);
-            font-size: 14px;
-            margin-top: 5px;
-        }
-
-        .display-card {
-            background: #f1f5f9;
-            border-radius: 16px;
-            padding: 30px 20px;
+        /* Tối ưu hiển thị chữ Hán kèm Pinyin phía trên bằng thẻ ruby */
+        .card-display {
+            background: var(--accent-light);
+            border: 1px solid rgba(79, 70, 229, 0.1);
+            border-radius: 20px;
+            padding: 40px 20px;
             text-align: center;
             margin-bottom: 25px;
-            position: relative;
-            border: 1px solid #e2e8f0;
         }
 
-        .zh-text {
+        ruby {
             font-size: 42px;
             font-weight: 700;
-            color: #000;
-            margin-bottom: 8px;
-            letter-spacing: 2px;
+            ruby-position: over;
         }
 
-        .py-text {
-            font-size: 18px;
-            color: var(--primary);
+        rt {
+            font-size: 16px;
             font-weight: 500;
+            color: var(--accent);
+            padding-bottom: 12px;
+            letter-spacing: 1px;
         }
 
-        .action-zone {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 25px;
-        }
+        .controls { display: flex; gap: 12px; margin-bottom: 25px; }
 
         .btn {
-            flex: 1;
-            padding: 14px 20px;
             border: none;
-            border-radius: 12px;
-            font-size: 16px;
+            outline: none;
+            padding: 14px 24px;
+            border-radius: 14px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
         }
 
-        .btn-listen {
-            background-color: #e0e7ff;
-            color: var(--primary);
-        }
+        .btn-audio { background: #e2e8f0; color: var(--text-dark); width: 35%; }
+        .btn-audio:hover { background: #cbd5e1; }
 
-        .btn-listen:hover { background-color: #c7d2fe; }
-
-        .btn-speak {
-            background-color: var(--primary);
-            color: white;
-            flex: 2;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-        }
-
-        .btn-speak:hover { background-color: var(--primary-hover); }
-
-        .btn-speak.recording {
-            background-color: var(--danger);
-            animation: pulse 1.5s infinite;
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        .btn-mic { background: var(--accent); color: white; width: 65%; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2); }
+        .btn-mic:hover { background: #4338ca; }
+        
+        /* Hiệu ứng xung động sóng âm khi nói */
+        .btn-mic.recording {
+            background: var(--c-danger);
+            box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+            animation: pulse 1.6s infinite cubic-bezier(0.66, 0, 0, 1);
         }
 
         @keyframes pulse {
-            0 { transform: scale(1); }
-            50% { transform: scale(1.02); }
-            100% { transform: scale(1); }
+            to { box-shadow: 0 0 0 18px rgba(239, 68, 68, 0); }
         }
 
-        .result-card {
-            background: #fafafa;
-            border-radius: 16px;
-            padding: 25px;
+        .panel-result {
+            background: #f8fafc;
             border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 20px;
             display: none;
-            animation: fadeIn 0.4s ease forwards;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .panel-result.show { display: block; }
 
-        .result-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
+        .rank-box { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 15px; }
+        .rank-title { font-size: 13px; font-weight: 600; color: var(--text-light); text-transform: uppercase; }
+        .rank-num { font-size: 32px; font-weight: 800; }
 
-        .score-badge {
-            font-size: 36px;
-            font-weight: 800;
-        }
+        .output-text { font-size: 14px; color: var(--text-light); line-height: 1.6; margin-bottom: 15px; }
+        .output-text strong { color: var(--text-dark); font-weight: 600; background: #e2e8f0; padding: 2px 6px; border-radius: 4px; }
 
-        .user-say {
-            font-size: 15px;
-            color: var(--text-muted);
-            margin-bottom: 15px;
-            line-height: 1.5;
-        }
-
-        .user-say span {
-            color: var(--text-main);
-            font-weight: 600;
-            background: #f1f5f9;
-            padding: 2px 8px;
-            border-radius: 6px;
-        }
-
-        .feedback-text {
-            font-size: 15px;
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
-
-        .btn-next {
-            background-color: var(--success);
-            color: white;
-            width: 100%;
-        }
-        .btn-next:hover { opacity: 0.9; }
-
-        .disabled {
-            opacity: 0.6;
-            cursor: not-allowed !important;
-            pointer-events: none;
-        }
-    </style>
-</head>
-<body>
-
-<div class="app-card">
-    <header>
-        <h1>AI 汉语发音 Coach</h1>
-        <p>Luyện phát âm tiếng Trung chuẩn xác với AI</p>
-    </header>
-
-    <div class="display-card">
-        <div class="zh-text" id="zhText">你好</div>
-        <div class="py-text" id="pyText">Nǐ hǎo</div>
-    </div>
-
-    <div class="action-zone">
-        <button class="btn btn-listen" id="listenBtn">🔊 Nghe mẫu</button>
-        <button class="btn btn-speak" id="speakBtn">🎙️ Bắt đầu nói</button>
-    </div>
-
-    <div class="result-card" id="resultCard">
-        <div class="result-header">
-            <span style="font-weight: 600
+        .btn-next { background: var(--c-success); color: white; width: 100
