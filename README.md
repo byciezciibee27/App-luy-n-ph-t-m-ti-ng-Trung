@@ -130,7 +130,7 @@
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); }
+            0 { transform: scale(1); }
             50% { transform: scale(1.02); }
             100% { transform: scale(1); }
         }
@@ -189,7 +189,6 @@
         }
         .btn-next:hover { opacity: 0.9; }
 
-        /* Tiện ích ẩn/hiển thị nhanh */
         .disabled {
             opacity: 0.6;
             cursor: not-allowed !important;
@@ -217,50 +216,4 @@
 
     <div class="result-card" id="resultCard">
         <div class="result-header">
-            <span style="font-weight: 600; color: var(--text-muted)">Điểm số của bạn:</span>
-            <span class="score-badge" id="scoreBadge">0%</span>
-        </div>
-        <p class="user-say">Hệ thống nghe được: <span id="spokenWords">...</span></p>
-        <p class="feedback-text" id="feedbackText">Đang phân tích...</p>
-        
-        <button class="btn btn-next" id="nextBtn">Câu tiếp theo ➔</button>
-    </div>
-</div>
-
-<script>
-    // Dữ liệu bộ câu hỏi chuẩn hóa
-    const DATA_SET = [
-        { zh: "你好", py: "Nǐ hǎo" },
-        { zh: "谢谢你", py: "Xièxie nǐ" },
-        { zh: "今天天气 rất 好", py: "Jīntiān tiānqì hěn hǎo" },
-        { zh: "我想 học 汉语", py: "Wǒ xiǎng xué hànyǔ" },
-        { zh: "你 吃饭了吗", py: "Nǐ chī fàn le ma?" },
-        { zh: "很高兴 认识你", py: "Hěn gāoxìng rènshí nǐ" }
-    ];
-
-    class PronunciationApp {
-        constructor() {
-            this.currentIndex = 0;
-            this.recognition = null;
-            this.isRecording = false;
-
-            this.initElements();
-            this.initSpeechRecognition();
-            this.initEvents();
-            this.renderPhrase();
-        }
-
-        initElements() {
-            this.zhText = document.getElementById('zhText');
-            this.pyText = document.getElementById('pyText');
-            this.listenBtn = document.getElementById('listenBtn');
-            this.speakBtn = document.getElementById('speakBtn');
-            this.resultCard = document.getElementById('resultCard');
-            this.scoreBadge = document.getElementById('scoreBadge');
-            this.spokenWords = document.getElementById('spokenWords');
-            this.feedbackText = document.getElementById('feedbackText');
-            this.nextBtn = document.getElementById('nextBtn');
-        }
-
-        initSpeechRecognition() {
-            const SpeechRecognition = window.SpeechRecognition ||v
+            <span style="font-weight: 600
